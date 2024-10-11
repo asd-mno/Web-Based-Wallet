@@ -1,10 +1,8 @@
-import React from 'react'
-
 function getRandomWords(count: number, setWords: (words: string[]) => void) {
   fetch('/english.txt')
     .then(response => response.text())
     .then(data => {
-      console.log(data);
+      //console.log(data);
 
       const words = data.split('\n').map(word => word.trim());
 
