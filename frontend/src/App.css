@@ -40,3 +40,24 @@
 .read-the-docs {
   color: #888;
 }
+
+.mnemonic-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px; /* Space between words */
+    margin-top: 10px;
+}
+
+.mnemonic-word {
+    background-color: #f0f0f0; /* Light gray background */
+    border: 1px solid #ccc; /* Border for each word */
+    border-radius: 4px; /* Rounded corners */
+    padding: 8px 12px; /* Padding for spacing */
+    font-weight: bold; /* Make the word bold */
+    font-size: 16px; /* Font size */
+    transition: background-color 0.2s; /* Smooth hover effect */
+}
+
+.mnemonic-word:hover {
+    background-color: #e0e0e0; /* Darker gray on hover */
+}
