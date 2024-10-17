@@ -1,11 +1,6 @@
 import { useState } from "react";
-import { mnemonicToSeed } from "bip39";
-import { derivePath } from "ed25519-hd-key";
-import { Keypair } from "@solana/web3.js";
-import nacl from "tweetnacl";
-import bs58 from "bs58";
+import { KeysGen } from "@/helpers/Keys";
 import { Button } from "@/components/ui/button";
-import { KeysContext } from "@/context/context";
 
 interface SolanaWalletProps {
     mnemonic: string; // Define the expected type for the mnemonic prop
@@ -14,25 +9,21 @@ interface SolanaWalletProps {
 export function SolanaWallet({ mnemonic }: SolanaWalletProps) {
     const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [publicKeys, setPublicKeys] = useState<string[]>([]); // State to hold public keys
-    const [privateKeys, setPrivateKeys] = useState<string[]>([]);
+    const [privateKeys, setPrivateKeys] = useState<string[]>([]); // State to hold private Keys
 
     const addWallet = () => {
-        if (!mnemonic) return; // Ensure mnemonic is defined
+        if (!mnemonic) return;  // Ensure mnemonic is defined
 
-        const seed = mnemonicToSeed(mnemonic);
-        const path = `m/44'/501'/${currentIndex}'/0'`;
-        const derivedSeed = derivePath(path, seed.toString("hex")).key;
-        const secret = nacl.sign.keyPair.fromSeed(derivedSeed).secretKey;
-        const keypair = Keypair.fromSecretKey(secret);
-        const phantomPrivateKey = bs58.encode(secret);
+       const keyPair = KeysGen({ mnemonic, currentIndex });
+       if (!keyPair) return;
+       const { publicKey, privateKey } = keyPair;
 
-        setPublicKeys((prevKeys) => [...prevKeys, keypair.publicKey.toBase58()]); // Store public key as string
-        setPrivateKeys((prevKeys) => [...prevKeys, phantomPrivateKey]); // Store private key
+        setPublicKeys((prevKeys) => [...prevKeys, publicKey]); // Store public key as string
+        setPrivateKeys((prevKeys) => [...prevKeys, privateKey]); // Store private key
         setCurrentIndex((prevIndex) => prevIndex + 1); // Increment the current index
     };
 
     return (
-        <KeysContext.Provider value={{ publicKey: publicKeys, privateKey: privateKeys, setPublicKey: setPublicKeys, setPrivateKey: setPrivateKeys }}>
             <div>
                 <Button onClick={addWallet}>
                     Add Wallet
@@ -48,6 +39,6 @@ export function SolanaWallet({ mnemonic }: SolanaWalletProps) {
                     </div>
                 ))}
             </div>
-        </KeysContext.Provider>
+      
     );
 }
