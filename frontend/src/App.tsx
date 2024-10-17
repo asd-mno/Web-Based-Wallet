@@ -1,8 +1,16 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import './App.css';
 import { SolanaWallet } from './pages/SolanaWallet.tsx';
 import { Button } from './components/ui/button.tsx';
 import { Mnemonics } from './helpers/Mnemonics.tsx';
+
+
+import { ConnectionProvider, useConnection, WalletProvider, } from "@solana/wallet-adapter-react";
+import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
+import { WalletModalProvider, WalletDisconnectButton, WalletMultiButton, } from "@solana/wallet-adapter-react-ui";
+import { clusterApiUrl } from "@solana/web3.js";
+import "@solana/wallet-adapter-react-ui/styles.css";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 function App() {
     const [mnemonic, setMnemonic] = useState<string[]>([]);
@@ -12,6 +20,9 @@ function App() {
     const [currentIndex, setCurrentIndex] = useState<number>(0); // Reset index when new phrase is created
 
 
+    const network = WalletAdapterNetwork.Devnet;
+    const endpoint = useMemo(() => clusterApiUrl(network), [network]);
+    
     async function Buttonhandler() {
         setPublicKeys([]);
         setPrivateKeys([]);
@@ -24,6 +35,7 @@ function App() {
 
     return (
         <>
+        
             <Button onClick={Buttonhandler}>
                 Create Seed Phrase
             </Button>
@@ -41,8 +53,37 @@ function App() {
                           setPrivateKeys={setPrivateKeys}
                           currentIndex={currentIndex}
                           setCurrentIndex={setCurrentIndex}/>
+
+            <ConnectionProvider endpoint={"https://api.devnet.solana.com"}>
+                <WalletProvider wallets={[]} autoConnect>
+                    <WalletModalProvider>
+                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                            <WalletMultiButton />
+                            <WalletDisconnectButton />
+                        </div>
+                        <WalletInfo />
+                    </WalletModalProvider>
+                </WalletProvider>
+            </ConnectionProvider>
         </>
     );
+
+    function WalletInfo() {
+    const wallet = useWallet(); // Moved here, inside WalletProvider context
+    
+
+    return (
+        <div>
+            {wallet.connected ? (
+                <div>
+                    <strong>Public Key:</strong> {wallet.publicKey?.toBase58() || "Not available"}
+                </div>
+            ) : (
+                "Wallet not connected"
+            )}
+        </div>
+    );
+}
 }
 
 export default App;
