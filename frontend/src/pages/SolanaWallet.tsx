@@ -4,12 +4,22 @@ import { Button } from "@/components/ui/button";
 
 interface SolanaWalletProps {
     mnemonic: string; // Define the expected type for the mnemonic prop
+    publicKeys: string[];
+    privateKeys: string[];
+    setPublicKeys: React.Dispatch<React.SetStateAction<string[]>>;
+    setPrivateKeys: React.Dispatch<React.SetStateAction<string[]>>;
+    currentIndex: number;
+    setCurrentIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export function SolanaWallet({ mnemonic }: SolanaWalletProps) {
-    const [currentIndex, setCurrentIndex] = useState<number>(0);
-    const [publicKeys, setPublicKeys] = useState<string[]>([]); // State to hold public keys
-    const [privateKeys, setPrivateKeys] = useState<string[]>([]); // State to hold private Keys
+export function SolanaWallet({ mnemonic,
+    publicKeys,
+    privateKeys,
+    setPublicKeys,
+    setPrivateKeys,
+    currentIndex,
+    setCurrentIndex, }: SolanaWalletProps) {
+   
 
     const addWallet = () => {
         if (!mnemonic) return;  // Ensure mnemonic is defined

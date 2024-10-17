@@ -7,8 +7,16 @@ import { Mnemonics } from './helpers/Mnemonics.tsx';
 function App() {
     const [mnemonic, setMnemonic] = useState<string[]>([]);
     const [mneuRaw, setMneuRaw] = useState<string>("");
+     const [publicKeys, setPublicKeys] = useState<string[]>([]); // Store public keys for resetting
+    const [privateKeys, setPrivateKeys] = useState<string[]>([]); // Store private keys for resetting
+    const [currentIndex, setCurrentIndex] = useState<number>(0); // Reset index when new phrase is created
+
 
     async function Buttonhandler() {
+        setPublicKeys([]);
+        setPrivateKeys([]);
+        setCurrentIndex(0);
+
         const { mnemonics, sepMnemonics } = await Mnemonics(); 
         setMneuRaw(mnemonics);  //  raw mnemonic without any spaces
         setMnemonic(sepMnemonics);  // space  separated mnemonic words
@@ -26,7 +34,13 @@ function App() {
                     </div>
                 ))}
             </div>
-            <SolanaWallet mnemonic={mneuRaw} />
+            <SolanaWallet mnemonic={mneuRaw}
+                          publicKeys = {publicKeys} 
+                          privateKeys={privateKeys}
+                          setPublicKeys={setPublicKeys}
+                          setPrivateKeys={setPrivateKeys}
+                          currentIndex={currentIndex}
+                          setCurrentIndex={setCurrentIndex}/>
         </>
     );
 }
