@@ -3,6 +3,7 @@ import './App.css';
 import { SolanaWallet } from './pages/SolanaWallet.tsx';
 import { Button } from './components/ui/button.tsx';
 import { Mnemonics } from './helpers/Mnemonics.tsx';
+import { ShowSolBalance } from './pages/GetBalance.tsx';
 
 
 import { ConnectionProvider, WalletProvider, } from "@solana/wallet-adapter-react";
@@ -32,7 +33,8 @@ function App() {
         setMneuRaw(mnemonics);  //  raw mnemonic without any spaces
         setMnemonic(sepMnemonics);  // space  separated mnemonic words
     }
-
+   
+    
     return (
         <>
         
@@ -62,6 +64,7 @@ function App() {
                             <WalletDisconnectButton />
                         </div>
                         <WalletInfo />
+                        <ShowSolBalance />
                     </WalletModalProvider>
                 </WalletProvider>
             </ConnectionProvider>
@@ -83,6 +86,7 @@ function App() {
             )}
         </div>
     );
+
 }
 }
 
