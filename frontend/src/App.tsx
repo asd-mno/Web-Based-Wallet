@@ -1,14 +1,14 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import './App.css';
 import { SolanaWallet } from './pages/SolanaWallet.tsx';
 import { Button } from './components/ui/button.tsx';
 import { Mnemonics } from './helpers/Mnemonics.tsx';
 
 
-import { ConnectionProvider, useConnection, WalletProvider, } from "@solana/wallet-adapter-react";
-import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
+import { ConnectionProvider, WalletProvider, } from "@solana/wallet-adapter-react";
+// import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import { WalletModalProvider, WalletDisconnectButton, WalletMultiButton, } from "@solana/wallet-adapter-react-ui";
-import { clusterApiUrl } from "@solana/web3.js";
+// import { clusterApiUrl } from "@solana/web3.js";
 import "@solana/wallet-adapter-react-ui/styles.css";
 import { useWallet } from "@solana/wallet-adapter-react";
 
@@ -20,9 +20,9 @@ function App() {
     const [currentIndex, setCurrentIndex] = useState<number>(0); // Reset index when new phrase is created
 
 
-    const network = WalletAdapterNetwork.Devnet;
-    const endpoint = useMemo(() => clusterApiUrl(network), [network]);
-    
+    //const network = WalletAdapterNetwork.Devnet;
+    //const endpoint = useMemo(() => clusterApiUrl(network), [network]);
+
     async function Buttonhandler() {
         setPublicKeys([]);
         setPrivateKeys([]);
